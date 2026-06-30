@@ -316,7 +316,7 @@ body {
 
 #aim-canvas {
     display: block;
-    cursor: none; /* Hide default cursor during play */
+    cursor: default;
     width: 100%;
     height: 100%;
 }
