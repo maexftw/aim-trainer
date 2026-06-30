@@ -1,0 +1,14 @@
+{
+  "name": "milbona07-lol-trainer",
+  "version": "2.0.0",
+  "description": "League of Legends Mechanical Trainer for Milbona07",
+  "scripts": {
+    "build": "echo 'Static build bypass'"
+  },
+  "keywords": [
+    "lol",
+    "aim-trainer"
+  ],
+  "author": "maexftw",
+  "license": "MIT"
+}
