@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Aim Sens Optimizer</title>
+    <!-- Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation & Control -->
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="logo-icon">🎯</span>
+                <div class="brand-text">
+                    <h1>PRO AIM OPTIMIZER</h1>
+                    <small>Sensitivity Calibration Tool</small>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" id="btn-mode-train" data-mode="training">
+                    <span class="icon">⚡</span> Training Mode
+                </button>
+                <button class="nav-item" id="btn-mode-calibrate" data-mode="calibration">
+                    <span class="icon">🔬</span> Sensitivity Calibration
+                </button>
+                <button class="nav-item" id="btn-mode-history" data-mode="history">
+                    <span class="icon">📈</span> Performance History
+                </button>
+            </nav>
+
+            <div class="settings-panel">
+                <h3>Hardware Profile</h3>
+                <div class="input-group">
+                    <label for="input-dpi">Mouse DPI (aus Software eintragen)</label>
+                    <input type="number" id="input-dpi" value="12000" min="100" max="32000" step="50">
+                </div>
+                <div class="input-group">
+                    <label for="input-trainer-sens">Trainer Sensitivität (Tempo im Tool)</label>
+                    <input type="number" id="input-trainer-sens" value="1.0" min="0.1" max="5.0" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label for="input-sens">Deine In-Game Sens (im echten Spiel)</label>
+                    <input type="number" id="input-sens" value="0.05" min="0.001" max="100" step="0.001">
+                </div>
+                <div class="input-group">
+                    <label for="select-game">Ziel-Spiel (für Konvertierung)</label>
+                    <select id="select-game" style="background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 12px; color: var(--text-primary); font-family: var(--font-body); outline: none;">
+                        <option value="grayzone">Gray Zone Warfare</option>
+                        <option value="farcry">Far Cry 6</option>
+                        <option value="helldivers">Helldivers 2</option>
+                        <option value="readyornot">Ready or Not</option>
+                        <option value="cs2">Counter-Strike 2 / Valorant</option>
+                        <option value="apex">Apex Legends</option>
+                        <option value="cod">Call of Duty / Warzone</option>
+                    </select>
+                </div>
+                <div class="input-group checkbox-group">
+                    <input type="checkbox" id="check-rawinput" checked>
+                    <label for="check-rawinput">Mausbeschleunigung deaktiviert</label>
+                </div>
+                <div class="scientific-note" style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 10px; margin-top: 10px;">
+                    <strong>Hardware-Hinweis:</strong> Ein Browser kann die DPI deiner Maus nicht auslesen. Trage deine echten DPI (z.B. aus Logitech G Hub, Razer Synapse) manuell oben ein.
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <p>Pro Aim Optimizer v1.1.0</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Screen 1: Game & Real-time Stats -->
+            <section class="screen-view active" id="view-game">
+                <div class="top-bar">
+                    <div class="session-info">
+                        <span id="current-sens-badge" class="badge">Sens: 1.0 (1600 DPI)</span>
+                        <span id="game-status-badge" class="badge active">Bereit</span>
+                    </div>
+                    <div class="game-timer">
+                        <span class="label">Zeit:</span>
+                        <span class="value" id="timer-display">30.0s</span>
+                    </div>
+                </div>
+
+                <!-- Calibration Progress Bar -->
+                <div class="calibration-progress-container" id="calibration-bar-container" style="display: none;">
+                    <div class="calibration-header">
+                        <span>Kalibrierung läuft: Phase <strong id="cal-current-step">1</strong> von 5</span>
+                        <span id="cal-step-sens">Sens Multiplikator: 0.6x</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="cal-progress-fill" style="width: 20%;"></div>
+                    </div>
+                    <p class="cal-instructions">Triff die Ziele. Das System testet verschiedene Geschwindigkeiten für deine Leistungskurve.</p>
+                </div>
+
+                <!-- Aim Canvas Container -->
+                <div class="canvas-container" id="canvas-container">
+                    <canvas id="aim-canvas"></canvas>
+                    <div class="canvas-overlay" id="canvas-overlay">
+                        <div class="overlay-content">
+                            <h2 id="overlay-title">Maus-Kalibrierung starten</h2>
+                            <p id="overlay-desc">Klicke die Ziele so schnell und präzise wie möglich an. Nach dem Start wird dein Mauszeiger gesperrt, um physikalische Multiplikatoren zu simulieren.</p>
+                            <button class="btn btn-primary" id="btn-start-game">Session Starten</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Performance Panel -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="label">Präzision</span>
+                            <span class="icon">🎯</span>
+                        </div>
+                        <div class="metric-value" id="metric-precision">0.0%</div>
+                        <div class="metric-sub" id="metric-precision-sub">Keine Klicks registriert</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="label">Reaktionszeit</span>
+                            <span class="icon">⏱️</span>
+                        </div>
+                        <div class="metric-value" id="metric-reaction">0 ms</div>
+                        <div class="metric-sub" id="metric-reaction-sub">Zeit bis zum Klick</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="label">Pfad-Effizienz</span>
+                            <span class="icon">📈</span>
+                        </div>
+                        <div class="metric-value" id="metric-efficiency">0.0%</div>
+                        <div class="metric-sub" id="metric-efficiency-sub">Geradlinigkeit der Bewegung</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="label">Overshoot Rate</span>
+                            <span class="icon">⚠️</span>
+                        </div>
+                        <div class="metric-value" id="metric-overshoot">0.0%</div>
+                        <div class="metric-sub" id="metric-overshoot-sub">Über das Ziel hinausgeschossen</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Screen 2: Calibration Results -->
+            <section class="screen-view" id="view-calibration-results">
+                <div class="results-layout">
+                    <div class="results-main">
+                        <div class="card premium-card">
+                            <h2>Kalibrierungs-Auswertung abgeschlossen 🔬</h2>
+                            <p class="subtitle">Vergleich deiner Klick-Performance bei verschiedenen Multiplikatoren</p>
+                            
+                            <div class="comparison-charts-container">
+                                <h3>Performance-Kurve (Durchsatz vs. Empfindlichkeit)</h3>
+                                <div class="chart-box">
+                                    <div class="custom-chart-y-axis">
+                                        <span>Durchsatz (bits/s)</span>
+                                    </div>
+                                    <div class="chart-wrapper">
+                                        <div class="custom-chart" id="throughput-chart">
+                                            <!-- Chart bars generated by JS -->
+                                        </div>
+                                        <div class="custom-chart-x-axis" id="throughput-chart-labels">
+                                            <!-- Labels generated by JS -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="recommendation-box">
+                                <div class="rec-header">
+                                    <span class="rec-icon">⚙️</span>
+                                    <div>
+                                        <h4>Empfehlung für deine Einstellungen</h4>
+                                        <p id="rec-sens-calc">Berechnet über das quadratische Regressions-Maximum</p>
+                                    </div>
+                                </div>
+                                <div class="rec-values">
+                                    <div class="rec-item">
+                                        <span class="label">Aktuelle Einstellungen</span>
+                                        <span class="value" id="rec-current-sens">1600 DPI | Multiplier 1.0</span>
+                                    </div>
+                                    <div class="arrow">➡️</div>
+                                    <div class="rec-item highlight">
+                                        <span class="label">Empfohlene Einstellungen</span>
+                                        <span class="value" id="rec-optimal-sens">1600 DPI | Multiplier 1.20</span>
+                                    </div>
+                                </div>
+                                <div class="rec-explanation" id="rec-text">
+                                    Hier steht die biomechanische Auswertung der Mausbewegung ohne neurobiologische Begriffe.
+                                </div>
+                                <div class="rec-actions">
+                                    <button class="btn btn-secondary" id="btn-copy-prompt">📋 Metriken für KI-Coach kopieren</button>
+                                    <button class="btn btn-primary" id="btn-apply-sens">In App übernehmen</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Game Translation Card -->
+                        <div class="card science-card" style="border-color: rgba(0, 240, 255, 0.25); box-shadow: 0 0 25px rgba(0, 240, 255, 0.05);">
+                            <h3>Übertragung in deine Spiele</h3>
+                            <div class="science-grid" style="grid-template-columns: 1fr;">
+                                <div class="science-item">
+                                    <h5 style="color: var(--accent-cyan); font-size: 1rem; margin-bottom: 10px;">In-Game Sensitivity Umrechnung:</h5>
+                                    <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-primary);">
+                                        Um diese Leistung zu erreichen, multipliziere deine aktuelle In-Game-Sensitivität im Spiel einfach mit dem empfohlenen Multiplikator:
+                                        <br><br>
+                                        <span style="display: inline-block; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-heading); font-size: 1.1rem; width: 100%;">
+                                            Neue In-Game Sens für <strong id="game-target-name">Gray Zone Warfare</strong>: <strong id="game-target-calc" style="color: var(--accent-green);">0.00</strong>
+                                        </span>
+                                        <br><br>
+                                        <p id="game-target-note" style="margin-top: 15px; font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">
+                                            Wähle ein Spiel aus, um spezifische Tuning-Tipps anzuzeigen.
+                                        </p>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-sidebar">
+                        <div class="card mini-stats-card">
+                            <h3>Zusammenfassung</h3>
+                            <div class="mini-stats-list" id="calibration-summary-list">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Screen 3: Performance History & Highscores -->
+            <section class="screen-view" id="view-history">
+                <div class="card history-card">
+                    <h2>Performance Verlauf & Highscores</h2>
+                    <p>Vergleiche deine Klick-Leistung und Highscores über verschiedene Profile hinweg.</p>
+                    
+                    <div class="history-table-container">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Datum</th>
+                                    <th>Modus</th>
+                                    <th>Maus-DPI</th>
+                                    <th>Sens Multiplikator</th>
+                                    <th>Effektive DPI (eDPI)</th>
+                                    <th>Score</th>
+                                    <th>Präzision</th>
+                                    <th>Reaktionszeit</th>
+                                    <th>Durchsatz</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body">
+                                <!-- Entries populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="actions-row">
+                        <button class="btn btn-secondary" id="btn-clear-history">🗑️ Verlauf löschen</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts linked in correct order for browser-direct execution -->
+    <script src="storage.js"></script>
+    <script src="analysis.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
