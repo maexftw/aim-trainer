@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Aim Sens Optimizer</title>
-    <!-- Google Fonts for premium typography -->
+    <title>Milbona07 LoL Mechanical Trainer</title>
+    <!-- Google Fonts for premium Hextech typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&family=Cinzel:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,137 +15,135 @@
         <!-- Sidebar Navigation & Control -->
         <aside class="sidebar">
             <div class="brand">
-                <span class="logo-icon">🎯</span>
+                <span class="logo-icon">⚔️</span>
                 <div class="brand-text">
-                    <h1>PRO AIM OPTIMIZER</h1>
-                    <small>Sensitivity Calibration Tool</small>
+                    <h1 style="font-family: 'Cinzel', serif; letter-spacing: 1.5px;">MILBONA07</h1>
+                    <small style="color: var(--accent-gold); font-size: 0.72rem; font-weight: 700;">LoL Mechanical Trainer</small>
                 </div>
             </div>
 
             <nav class="nav-menu">
-                <button class="nav-item active" id="btn-mode-train" data-mode="training">
-                    <span class="icon">⚡</span> Training Mode
+                <button class="nav-item active" id="btn-mode-cs" data-mode="cs">
+                    <span class="icon">🌾</span> Last Hitting (CS)
                 </button>
-                <button class="nav-item" id="btn-mode-calibrate" data-mode="calibration">
-                    <span class="icon">🔬</span> Sensitivity Calibration
+                <button class="nav-item" id="btn-mode-kiting" data-mode="kiting">
+                    <span class="icon">🏃</span> Kiting (Attack-Move)
+                </button>
+                <button class="nav-item" id="btn-mode-dodge" data-mode="dodge">
+                    <span class="icon">🛡️</span> Skillshot Dodger
+                </button>
+                <button class="nav-item" id="btn-mode-security" data-mode="security">
+                    <span class="icon">🔒</span> Security Compliance
                 </button>
                 <button class="nav-item" id="btn-mode-history" data-mode="history">
-                    <span class="icon">📈</span> Performance History
+                    <span class="icon">🏆</span> Leaderboards
                 </button>
             </nav>
 
             <div class="settings-panel">
-                <h3>Hardware Profile</h3>
+                <h3>LoL Hardware Profile</h3>
                 <div class="input-group">
-                    <label for="input-dpi">Mouse DPI (aus Software eintragen)</label>
+                    <label for="input-dpi">Mouse DPI (G-Hub)</label>
                     <input type="number" id="input-dpi" value="12000" min="100" max="32000" step="50">
                 </div>
                 <div class="input-group">
-                    <label for="input-trainer-sens">Trainer Sensitivität (Tempo im Tool)</label>
+                    <label for="input-trainer-sens">Trainer Tempo (Maus-Multiplikator)</label>
                     <input type="number" id="input-trainer-sens" value="1.0" min="0.1" max="5.0" step="0.1">
                 </div>
                 <div class="input-group">
-                    <label for="input-sens">Deine In-Game Sens (im echten Spiel)</label>
-                    <input type="number" id="input-sens" value="0.05" min="0.001" max="100" step="0.001">
-                </div>
-                <div class="input-group">
-                    <label for="select-game">Ziel-Spiel (für Konvertierung)</label>
-                    <select id="select-game" style="background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 12px; color: var(--text-primary); font-family: var(--font-body); outline: none;">
-                        <option value="grayzone">Gray Zone Warfare</option>
-                        <option value="farcry">Far Cry 6</option>
-                        <option value="helldivers">Helldivers 2</option>
-                        <option value="readyornot">Ready or Not</option>
-                        <option value="cs2">Counter-Strike 2 / Valorant</option>
-                        <option value="apex">Apex Legends</option>
-                        <option value="cod">Call of Duty / Warzone</option>
-                    </select>
+                    <label for="input-sens">LoL In-Game Sens (Slider 0-100)</label>
+                    <input type="number" id="input-sens" value="50" min="1" max="100" step="1">
                 </div>
                 <div class="input-group checkbox-group">
                     <input type="checkbox" id="check-rawinput" checked>
-                    <label for="check-rawinput">Mausbeschleunigung deaktiviert</label>
+                    <label for="check-rawinput">Zeigerbeschleunigung aus</label>
                 </div>
-                <div class="scientific-note" style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 10px; margin-top: 10px;">
-                    <strong>Hardware-Hinweis:</strong> Ein Browser kann die DPI deiner Maus nicht auslesen. Trage deine echten DPI (z.B. aus Logitech G Hub, Razer Synapse) manuell oben ein.
+                <div class="scientific-note" style="border-top: 1px solid var(--border-color); padding-top: 10px; margin-top: 10px; font-size: 0.72rem; color: var(--text-muted);">
+                    <strong>Zertifikat:</strong> Dieses System läuft offline und speichert Spielstände lokal verschlüsselt im Browser.
                 </div>
             </div>
             
             <div class="sidebar-footer">
-                <p>Pro Aim Optimizer v1.1.0</p>
+                <p>Milbona07 League Coach v2.0</p>
+                <p style="color: var(--accent-gold); font-weight: 500;">Approved Security Level: HIGH</p>
             </div>
         </aside>
 
         <!-- Main Content Area -->
         <main class="main-content">
-            <!-- Screen 1: Game & Real-time Stats -->
+            <!-- Screen 1: Game Screen -->
             <section class="screen-view active" id="view-game">
                 <div class="top-bar">
                     <div class="session-info">
-                        <span id="current-sens-badge" class="badge">Sens: 1.0 (1600 DPI)</span>
+                        <span id="current-sens-badge" class="badge">Trainer-Sens: 1.0x | LoL-eDPI: 600000</span>
                         <span id="game-status-badge" class="badge active">Bereit</span>
                     </div>
                     <div class="game-timer">
-                        <span class="label">Zeit:</span>
+                        <span class="label">Verbleibende Zeit:</span>
                         <span class="value" id="timer-display">30.0s</span>
                     </div>
                 </div>
 
-                <!-- Calibration Progress Bar -->
-                <div class="calibration-progress-container" id="calibration-bar-container" style="display: none;">
+                <!-- Calibration Progress Bar (Runs during Calibration Mode) -->
+                <div class="calibration-progress-container" id="calibration-bar-container" style="display: none; background: rgba(200, 170, 110, 0.05); border-color: rgba(200, 170, 110, 0.2);">
                     <div class="calibration-header">
-                        <span>Kalibrierung läuft: Phase <strong id="cal-current-step">1</strong> von 5</span>
-                        <span id="cal-step-sens">Sens Multiplikator: 0.6x</span>
+                        <span>Maus-Kalibrierung: Phase <strong id="cal-current-step" style="color: var(--accent-gold);">1</strong> von 5</span>
+                        <span id="cal-step-sens" style="color: var(--accent-gold);">Tempo: 0.6x</span>
                     </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="cal-progress-fill" style="width: 20%;"></div>
+                        <div class="progress-bar-fill" id="cal-progress-fill" style="background: linear-gradient(90deg, var(--accent-blue), var(--accent-gold)); width: 20%;"></div>
                     </div>
-                    <p class="cal-instructions">Triff die Ziele. Das System testet verschiedene Geschwindigkeiten für deine Leistungskurve.</p>
+                    <p class="cal-instructions">Kalibriere dein Klick-Tempo über 5 Durchgänge für das optimale League of Legends Spielgefühl.</p>
                 </div>
 
                 <!-- Aim Canvas Container -->
-                <div class="canvas-container" id="canvas-container">
+                <div class="canvas-container" id="canvas-container" style="border-color: rgba(200, 170, 110, 0.15);">
                     <canvas id="aim-canvas"></canvas>
                     <div class="canvas-overlay" id="canvas-overlay">
                         <div class="overlay-content">
-                            <h2 id="overlay-title">Maus-Kalibrierung starten</h2>
-                            <p id="overlay-desc">Klicke die Ziele so schnell und präzise wie möglich an. Nach dem Start wird dein Mauszeiger gesperrt, um physikalische Multiplikatoren zu simulieren.</p>
-                            <button class="btn btn-primary" id="btn-start-game">Session Starten</button>
+                            <h2 id="overlay-title" style="font-family: 'Cinzel', serif; color: var(--accent-gold); text-shadow: 0 0 15px rgba(200, 170, 110, 0.3);">Last Hitting Trainer</h2>
+                            <p id="overlay-desc">Spawnt Minions, deren Leben sinkt. Klicke sie *nur* an, wenn ihr Lebensbalken rot/gold leuchtet (<20% HP), um das Gold abzugreifen.</p>
+                            <div class="overlay-buttons" style="display: flex; gap: 12px; justify-content: center;">
+                                <button class="btn btn-primary" id="btn-start-game">Runde Starten</button>
+                                <button class="btn btn-secondary" id="btn-calibrate-game" style="border-color: var(--accent-gold); color: var(--accent-gold);">Maus Kalibrieren (5 Runden)</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Live Performance Panel -->
+                <!-- Dynamic Metrics Dashboard -->
                 <div class="metrics-grid">
                     <div class="metric-card">
                         <div class="metric-header">
-                            <span class="label">Präzision</span>
-                            <span class="icon">🎯</span>
+                            <span class="label" id="label-metric-1">Ergebnis (CS)</span>
+                            <span class="icon" id="icon-metric-1">🌾</span>
                         </div>
-                        <div class="metric-value" id="metric-precision">0.0%</div>
-                        <div class="metric-sub" id="metric-precision-sub">Keine Klicks registriert</div>
+                        <div class="metric-value" id="metric-1">0 / 0</div>
+                        <div class="metric-sub" id="sub-metric-1">Minions getötet</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-header">
-                            <span class="label">Reaktionszeit</span>
-                            <span class="icon">⏱️</span>
+                            <span class="label" id="label-metric-2">Treffsicherheit</span>
+                            <span class="icon" id="icon-metric-2">🎯</span>
                         </div>
-                        <div class="metric-value" id="metric-reaction">0 ms</div>
-                        <div class="metric-sub" id="metric-reaction-sub">Zeit bis zum Klick</div>
+                        <div class="metric-value" id="metric-2">0.0%</div>
+                        <div class="metric-sub" id="sub-metric-2">Erfolgreiche Klicks</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-header">
-                            <span class="label">Pfad-Effizienz</span>
-                            <span class="icon">📈</span>
+                            <span class="label" id="label-metric-3">Laufweg-Präzision</span>
+                            <span class="icon" id="icon-metric-3">📈</span>
                         </div>
-                        <div class="metric-value" id="metric-efficiency">0.0%</div>
-                        <div class="metric-sub" id="metric-efficiency-sub">Geradlinigkeit der Bewegung</div>
+                        <div class="metric-value" id="metric-3">0.0%</div>
+                        <div class="metric-sub" id="sub-metric-3">Mittlere Abweichung</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-header">
-                            <span class="label">Overshoot Rate</span>
-                            <span class="icon">⚠️</span>
+                            <span class="label" id="label-metric-4">Fehlerrate</span>
+                            <span class="icon" id="icon-metric-4">⚠️</span>
                         </div>
-                        <div class="metric-value" id="metric-overshoot">0.0%</div>
-                        <div class="metric-sub" id="metric-overshoot-sub">Über das Ziel hinausgeschossen</div>
+                        <div class="metric-value" id="metric-4">0.0%</div>
+                        <div class="metric-sub" id="sub-metric-4">Klicks außerhalb des Fensters</div>
                     </div>
                 </div>
             </section>
@@ -154,15 +152,15 @@
             <section class="screen-view" id="view-calibration-results">
                 <div class="results-layout">
                     <div class="results-main">
-                        <div class="card premium-card">
-                            <h2>Kalibrierungs-Auswertung abgeschlossen 🔬</h2>
-                            <p class="subtitle">Vergleich deiner Klick-Performance bei verschiedenen Multiplikatoren</p>
+                        <div class="card premium-card" style="border-color: rgba(200, 170, 110, 0.35); box-shadow: 0 0 25px rgba(200, 170, 110, 0.05);">
+                            <h2 style="font-family: 'Cinzel', serif; color: var(--accent-gold);">Maus-Kalibrierung Ausgewertet 🔬</h2>
+                            <p class="subtitle">Vergleich deines LoL-Klickdurchsatzes bei verschiedenen Maus-Multiplikatoren</p>
                             
                             <div class="comparison-charts-container">
-                                <h3>Performance-Kurve (Durchsatz vs. Empfindlichkeit)</h3>
+                                <h3>Klick-Durchsatz nach Fitts's Law</h3>
                                 <div class="chart-box">
                                     <div class="custom-chart-y-axis">
-                                        <span>Durchsatz (bits/s)</span>
+                                        <span>Leistungs-Durchsatz (bits/s)</span>
                                     </div>
                                     <div class="chart-wrapper">
                                         <div class="custom-chart" id="throughput-chart">
@@ -175,50 +173,50 @@
                                 </div>
                             </div>
 
-                            <div class="recommendation-box">
+                            <div class="recommendation-box" style="background: rgba(200, 170, 110, 0.02); border-color: rgba(200, 170, 110, 0.2);">
                                 <div class="rec-header">
-                                    <span class="rec-icon">⚙️</span>
+                                    <span class="rec-icon" style="background: rgba(200, 170, 110, 0.1); color: var(--accent-gold);">⚙️</span>
                                     <div>
-                                        <h4>Empfehlung für deine Einstellungen</h4>
-                                        <p id="rec-sens-calc">Berechnet über das quadratische Regressions-Maximum</p>
+                                        <h4 style="color: var(--accent-gold);">Optimierte League Sensitivity</h4>
+                                        <p id="rec-sens-calc">Maximum-Parabel berechnet über Klick-Effizienz und Positionierung</p>
                                     </div>
                                 </div>
                                 <div class="rec-values">
                                     <div class="rec-item">
-                                        <span class="label">Aktuelle Einstellungen</span>
-                                        <span class="value" id="rec-current-sens">1600 DPI | Multiplier 1.0</span>
+                                        <span class="label">Aktuelle LoL Sens</span>
+                                        <span class="value" id="rec-current-sens">DPI 12000 | In-Game 50</span>
                                     </div>
-                                    <div class="arrow">➡️</div>
+                                    <div class="arrow" style="color: var(--accent-gold);">➡️</div>
                                     <div class="rec-item highlight">
-                                        <span class="label">Empfohlene Einstellungen</span>
-                                        <span class="value" id="rec-optimal-sens">1600 DPI | Multiplier 1.20</span>
+                                        <span class="label">Empfohlene LoL Sens</span>
+                                        <span class="value" id="rec-optimal-sens" style="color: var(--accent-gold); text-shadow: 0 0 10px rgba(200, 170, 110, 0.3);">DPI 12000 | In-Game 60</span>
                                     </div>
                                 </div>
-                                <div class="rec-explanation" id="rec-text">
-                                    Hier steht die biomechanische Auswertung der Mausbewegung ohne neurobiologische Begriffe.
+                                <div class="rec-explanation" id="rec-text" style="border-left-color: var(--accent-gold);">
+                                    Analyse der mechanischen Abweichungen, Overshoots und Klick-Frequenzen.
                                 </div>
                                 <div class="rec-actions">
                                     <button class="btn btn-secondary" id="btn-copy-prompt">📋 Metriken für KI-Coach kopieren</button>
-                                    <button class="btn btn-primary" id="btn-apply-sens">In App übernehmen</button>
+                                    <button class="btn btn-primary" id="btn-apply-sens" style="background: var(--accent-gold); color: #000; box-shadow: 0 0 15px rgba(200, 170, 110, 0.2);">In Tool Übernehmen</button>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Game Translation Card -->
-                        <div class="card science-card" style="border-color: rgba(0, 240, 255, 0.25); box-shadow: 0 0 25px rgba(0, 240, 255, 0.05);">
-                            <h3>Übertragung in deine Spiele</h3>
+                        <div class="card science-card" style="border-color: rgba(200, 170, 110, 0.25); box-shadow: 0 0 25px rgba(200, 170, 110, 0.05);">
+                            <h3>Umrechnung für League of Legends</h3>
                             <div class="science-grid" style="grid-template-columns: 1fr;">
                                 <div class="science-item">
-                                    <h5 style="color: var(--accent-cyan); font-size: 1rem; margin-bottom: 10px;">In-Game Sensitivity Umrechnung:</h5>
+                                    <h5 style="color: var(--accent-gold); font-size: 1rem; margin-bottom: 10px;">In-Game Sensitivity Anpassung:</h5>
                                     <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-primary);">
-                                        Um diese Leistung zu erreichen, multipliziere deine aktuelle In-Game-Sensitivität im Spiel einfach mit dem empfohlenen Multiplikator:
+                                        League of Legends skaliert seinen Mausregler im Spiel von 0 bis 100 linear (Schrittweite 5). Multipliziere deinen aktuellen Spielwert einfach mit dem errechneten Faktor.
                                         <br><br>
                                         <span style="display: inline-block; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-heading); font-size: 1.1rem; width: 100%;">
-                                            Neue In-Game Sens für <strong id="game-target-name">Gray Zone Warfare</strong>: <strong id="game-target-calc" style="color: var(--accent-green);">0.00</strong>
+                                            Empfohlener neuer LoL In-Game Sens Regler: <strong id="lol-target-calc" style="color: var(--accent-gold);">60</strong> (aktuell: <strong id="lol-current-display">50</strong>)
                                         </span>
                                         <br><br>
-                                        <p id="game-target-note" style="margin-top: 15px; font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">
-                                            Wähle ein Spiel aus, um spezifische Tuning-Tipps anzuzeigen.
+                                        <p id="game-target-note" style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic; margin-top: 10px;">
+                                            Stelle den Regler im League-Einstellungsmenü unter 'Steuerung' -> 'Mausgeschwindigkeit' auf diesen ganzzahligen Wert ein.
                                         </p>
                                     </p>
                                 </div>
@@ -227,7 +225,7 @@
                     </div>
 
                     <div class="results-sidebar">
-                        <div class="card mini-stats-card">
+                        <div class="card mini-stats-card" style="border-color: rgba(200, 170, 110, 0.2);">
                             <h3>Zusammenfassung</h3>
                             <div class="mini-stats-list" id="calibration-summary-list">
                                 <!-- Generated by JS -->
@@ -237,23 +235,68 @@
                 </div>
             </section>
 
-            <!-- Screen 3: Performance History & Highscores -->
+            <!-- Screen 3: Milbona07 Security Shield (Joke Panel) -->
+            <section class="screen-view" id="view-security">
+                <div class="card premium-card" style="border-color: var(--accent-green); box-shadow: 0 0 25px rgba(16, 185, 129, 0.05); display: flex; flex-direction: column; gap: 20px;">
+                    <div style="display: flex; align-items: center; gap: 16px; border-bottom: 1px solid rgba(16, 185, 129, 0.2); padding-bottom: 20px;">
+                        <span style="font-size: 3.5rem; filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));">🛡️</span>
+                        <div>
+                            <h2 style="font-family: 'Cinzel', serif; color: var(--accent-green);">MILBONA07 SECURITY COMPLIANCE SHIELD</h2>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 4px;">Hyper-Secured Client-Side Motor-Cortex Execution Environment</p>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(16, 185, 129, 0.03); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 12px; padding: 20px; line-height: 1.6;">
+                        <h4 style="color: var(--accent-green); font-family: var(--font-heading); margin-bottom: 8px;">Audit-Ergebnis: VOLLSTÄNDIG SICHER (100% COMPLIANT)</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-primary);">
+                            Dieses Softwarepaket wurde gemäß dem militärischen <strong>Milbona07-Sicherheitsstandard</strong> zertifiziert. Sämtliche Analysen deiner Maus- und Klickkoordinaten verbleiben vollständig innerhalb deines lokalen Browsers und deines motorischen Kortex. Es findet keinerlei Künstliche Intelligenz (KI) statt, die deine Spieldaten verarbeitet oder in die Cloud synchronisiert.
+                        </p>
+                    </div>
+
+                    <h3 style="font-family: var(--font-heading); font-size: 1.1rem; color: var(--text-primary); margin-top: 10px;">Zertifizierte Sicherheits-Zusagen:</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
+                            <h5 style="color: var(--accent-green); font-size: 0.95rem; margin-bottom: 6px;">[✓] 0.00% Cloud-Datenübertragung</h5>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">Keine Serververbindung. Weder Gemini noch Deepseek noch die NSA erhalten Einblick in deine Reaktionszeiten oder Fehlwürfe.</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
+                            <h5 style="color: var(--accent-green); font-size: 0.95rem; margin-bottom: 6px;">[✓] Sandboxed Offline-Execution</h5>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">Läuft vollständig offline. Perfekt spielbar im Atombunker, in der Antarktis oder bei gekapptem Glasfaserkabel.</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
+                            <h5 style="color: var(--accent-green); font-size: 0.95rem; margin-bottom: 6px;">[✓] Zero AI Telemetrie</h5>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">Die mathematische Kurvenberechnung basiert auf Schulmathematik des 17. Jahrhunderts (Least Squares Parabeln) – absolut KI-frei.</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
+                            <h5 style="color: var(--accent-green); font-size: 0.95rem; margin-bottom: 6px;">[✓] DSGVO-konforme Speicherung</h5>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">Deine Bestenlisten werden verschlüsselt im LocalStorage deines eigenen Browsers abgelegt. Keine Cookies, kein Tracking.</p>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                        System-ID: <span style="font-family: monospace;">MILBONa07-SEC-5e656a44-ACTIVE</span> | Verschlüsselungstiefe: <span style="font-family: monospace;">LOKALER KORTEX (0 Bit Netzwerktiefe)</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Screen 4: Leaderboards -->
             <section class="screen-view" id="view-history">
-                <div class="card history-card">
-                    <h2>Performance Verlauf & Highscores</h2>
-                    <p>Vergleiche deine Klick-Leistung und Highscores über verschiedene Profile hinweg.</p>
+                <div class="card history-card" style="border-color: rgba(200, 170, 110, 0.2);">
+                    <h2 style="font-family: 'Cinzel', serif; color: var(--accent-gold);">Milbona07 Leaderboards</h2>
+                    <p>Verfolge deine Klick-Leistung und Highscores in den verschiedenen Trainings-Disziplinen.</p>
                     
                     <div class="history-table-container">
                         <table class="history-table">
                             <thead>
                                 <tr>
                                     <th>Datum</th>
-                                    <th>Modus</th>
+                                    <th>Disziplin</th>
                                     <th>Maus-DPI</th>
-                                    <th>Sens Multiplikator</th>
-                                    <th>Effektive DPI (eDPI)</th>
-                                    <th>Score</th>
-                                    <th>Präzision</th>
+                                    <th>Trainer-Sens</th>
+                                    <th>In-Game Sens</th>
+                                    <th>Punkte / Score</th>
+                                    <th>Präzision / Treffer</th>
                                     <th>Reaktionszeit</th>
                                     <th>Durchsatz</th>
                                 </tr>

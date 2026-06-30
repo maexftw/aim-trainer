@@ -1,11 +1,11 @@
 /**
- * Biomechanical Motor Control & Sensitivity Analyzer
- * Focuses strictly on physical mouse metrics, trajectory analysis, and game conversion.
+ * Biomechanical Motor Control & Sensitivity Analyzer - LoL Edition
+ * Analyzes League of Legends specific mechanics (CSing, Kiting, Dodging).
  */
 
 const PerformanceAnalyzer = {
     // Calculates metrics for a single round of clicks
-    calculateSessionMetrics(runs, gameDuration) {
+    calculateSessionMetrics(runs, gameDuration, activeMode) {
         if (!runs || runs.length === 0) {
             return {
                 precision: 0,
@@ -16,7 +16,8 @@ const PerformanceAnalyzer = {
                 avgThroughput: 0,
                 avgJitter: 0,
                 totalClicks: 0,
-                totalHits: 0
+                totalHits: 0,
+                extraMetrics: {}
             };
         }
 
@@ -125,6 +126,52 @@ const PerformanceAnalyzer = {
         const avgThroughput = validReactionCount > 0 ? (totalThroughput / validReactionCount) : 0;
         const avgJitter = totalClicks > 0 ? (totalJitter / totalClicks) : 0;
 
+        // Custom metrics based on League Mode
+        let extraMetrics = {};
+        if (activeMode === 'cs') {
+            const spawned = runs[0]?.spawnedMinions || totalClicks;
+            const tooEarly = runs.filter(r => r.tooEarly).length;
+            const missed = runs.filter(r => r.missed).length;
+            extraMetrics = {
+                scoreText: `${totalHits} / ${spawned}`,
+                subText: `${missed} Minions verpasst`,
+                precisionText: `${precision.toFixed(1)}%`,
+                precisionSub: `${tooEarly}x zu früh geklickt`,
+                efficiencyText: `${avgEfficiency.toFixed(1)}%`,
+                efficiencySub: "Mausweg zum Minion",
+                errorText: `${((tooEarly + missed) / spawned * 100).toFixed(1)}%`,
+                errorSub: "Missed Last Hits Rate"
+            };
+        } else if (activeMode === 'kiting') {
+            const correctAlternations = runs.filter(r => r.kitingSuccess).length;
+            const totalTransitions = runs.length;
+            const rhythmDeviation = runs[0]?.rhythmDeviation || 0;
+            extraMetrics = {
+                scoreText: `${correctAlternations} / ${totalTransitions}`,
+                subText: "Erfolgreiches Attack-Move",
+                precisionText: `${precision.toFixed(1)}%`,
+                precisionSub: "Click-Accuracy",
+                efficiencyText: `${(100 - rhythmDeviation).toFixed(1)}%`,
+                efficiencySub: "Rhythmus-Konstanz",
+                errorText: `${((totalTransitions - correctAlternations) / Math.max(1, totalTransitions) * 100).toFixed(1)}%`,
+                errorSub: "Fehl-Alternationen"
+            };
+        } else if (activeMode === 'dodge') {
+            const hits = runs.filter(r => r.gotHit).length;
+            const spawned = runs[0]?.skillshotsSpawned || 0;
+            const survivalSec = runs[0]?.survivalTime || gameDuration;
+            extraMetrics = {
+                scoreText: `${survivalSec.toFixed(1)}s`,
+                subText: "Überlebenszeit",
+                precisionText: `${spawned > 0 ? ((1 - (hits / spawned)) * 100).toFixed(1) : '100'}%`,
+                precisionSub: "Ausweich-Quote",
+                efficiencyText: `${avgEfficiency.toFixed(1)}%`,
+                efficiencySub: "Geradlinigkeit Ausweichweg",
+                errorText: `${hits} Treffer`,
+                errorSub: "Schadens-Einschläge"
+            };
+        }
+
         return {
             precision: parseFloat(precision.toFixed(1)),
             avgReactionTime: Math.round(avgReaction),
@@ -134,7 +181,8 @@ const PerformanceAnalyzer = {
             avgThroughput: parseFloat(avgThroughput.toFixed(2)),
             avgJitter: parseFloat(avgJitter.toFixed(1)),
             totalClicks,
-            totalHits
+            totalHits,
+            extraMetrics
         };
     },
 
@@ -224,51 +272,61 @@ const PerformanceAnalyzer = {
     },
 
     // Generates biomechanical coaching feedback in German
-    generateCoachingText(metrics, optimalSens, currentSens, dpi) {
+    generateCoachingText(metrics, optimalSens, currentSens, dpi, activeMode) {
         const changePct = Math.round(Math.abs(optimalSens - currentSens) / currentSens * 100);
         let actionWord = optimalSens > currentSens ? "erhöhen" : "verringern";
         
         let analysis = "";
         
         if (Math.abs(optimalSens - currentSens) < 0.05) {
-            analysis += `Deine aktuelle Mausempfindlichkeit (${currentSens}x bei ${dpi} DPI) ist mathematisch optimal für deine Handkoordination. `;
+            analysis += `Deine aktuelle Mausempfindlichkeit (${currentSens}x bei ${dpi} DPI) ist perfekt für deine LoL-Handkoordination kalibriert. `;
         } else {
             analysis += `Die Messungen empfehlen eine Anpassung deiner Sensitivität um ca. <strong>${changePct}% ${actionWord}</strong> (Neuer Multiplikator-Faktor: <strong>${optimalSens}x</strong>). `;
         }
 
-        if (metrics.overshootRate > 25) {
-            analysis += `<br><br>Du hast eine <strong>Overshoot-Rate von ${metrics.overshootRate}%</strong>. Das bedeutet, dass der Mauszeiger über das Ziel hinausschießt und zurückgezogen werden muss. 
-            Wenn dieser Wert bei <em>niedrigen</em> Geschwindigkeiten auftritt, liegt es meist an der Trägheit des Arms (zu viel Schwungmasse). Bei <em>hohen</em> Geschwindigkeiten fehlt oft die feinmotorische Kontrolle in den Fingern.`;
-        } else if (metrics.undershootRate > 25) {
-            analysis += `<br><br>Deine <strong>Undershoot-Rate liegt bei ${metrics.undershootRate}%</strong>. Du brachst zu lange, um das Ziel zu erreichen, weil du die Bewegung zu früh stoppst und korrigieren musst. Dies erhöht deine durchschnittliche Reaktionszeit auf ${metrics.avgReactionTime} ms.`;
-        }
-
-        if (metrics.avgPathEfficiency < 80) {
-            analysis += `<br><br>Deine <strong>Bewegungs-Geradlinigkeit beträgt ${metrics.avgPathEfficiency}%</strong>. Das bedeutet, dass deine Mausbahnen Kurven oder leichtes Zittern aufweisen. Versuche, die Bewegung bewusster aus dem Gelenk heraus zu stabilisieren und das Ziel vor dem Start fest anzuvisieren.`;
-        } else {
-            analysis += `<br><br>Deine <strong>Bewegungs-Geradlinigkeit ist mit ${metrics.avgPathEfficiency}% sehr stabil und direkt</strong>.`;
+        if (activeMode === 'cs') {
+            analysis += `<br><br><strong>CS-Analyse:</strong> `;
+            if (metrics.overshootRate > 20) {
+                analysis += `Deine Overshoot-Rate von ${metrics.overshootRate}% beim Anklicken der Minions ist erhöht. Du verfehlst den Zielpunkt des Minions leicht durch Übersteuerung. Eine Absenkung der Sensitivität hilft dir, ruhiger auf die Ziel-Lebensbalken zu klicken.`;
+            } else {
+                analysis += `Deine Klick-Präzision auf die Minions ist stabil. Konzentriere dich darauf, das sinkende Leben der Vasallen genau am Kill-Schwellenwert abzupassen.`;
+            }
+        } else if (activeMode === 'kiting') {
+            analysis += `<br><br><strong>Kiting-Analyse (Attack-Move):</strong> `;
+            if (metrics.avgJitter > 15) {
+                analysis += `Dein Mauspfad beim Wechseln zwischen Feind und Ausweichziel ist unruhig (${metrics.avgJitter}px Jitter). Dies stört deinen Kiting-Rhythmus. Versuche, die Mausbewegungen gleichmäßiger aus dem Gelenk heraus zu ziehen.`;
+            } else {
+                analysis += `Dein Kiting-Rhythmus ist sehr gut. Deine Klicks alternieren präzise und zügig.`;
+            }
+        } else if (activeMode === 'dodge') {
+            analysis += `<br><br><strong>Ausweich-Analyse (Skillshot-Dodge):</strong> `;
+            if (metrics.avgReactionTime > 250) {
+                analysis += `Deine durchschnittliche Reaktionszeit liegt bei ${metrics.avgReactionTime} ms. Halte deine Klicks näher am eigenen Champion-Kreis. Kurze Laufwege verringern das Richtungswechsel-Zeitfenster erheblich, wodurch du schneller Haken schlagen kannst.`;
+            } else {
+                analysis += `Hervorragende Reaktionszeit beim Ausweichen. Deine Ausweichklicks erfolgen extrem schnell.`;
+            }
         }
 
         return analysis;
     },
 
     // Generates text that can be copied into Deepseek/ChatGPT
-    generateDeepseekPrompt(metrics, calibrationRuns, currentSens, dpi) {
+    generateDeepseekPrompt(metrics, calibrationRuns, currentSens, dpi, activeMode) {
         let runText = calibrationRuns.map(r => `- Sens-Multiplikator: ${r.multiplier}x -> Durchsatz: ${r.throughput} bits/s, Präzision: ${r.precision}%, Overshoot: ${r.overshootRate}%`).join('\n');
+        let modeName = activeMode === 'cs' ? 'Last Hitting (Creep Score)' : activeMode === 'kiting' ? 'Kiting (Attack-Move)' : 'Skillshot Dodging';
         
-        return `Verhalte dich als strategischer Aiming- und E-Sports-Coach. Analysiere mein motorisches Fehlerprofil basierend auf meinen Kalibrierungsdaten kurz, prägnant und lösungsorientiert. 
+        return `Verhalte dich als strategischer League of Legends E-Sports-Coach. Analysiere das motorische Klick-Profil von Milbona07 im Modus "${modeName}" kurz und prägnant.
 
-DATEN:
-- Aktuelle Sensitivität: ${currentSens}x bei ${dpi} DPI (Hardware-DPI der Maus)
-- Reaktionszeit: ${metrics.avgReactionTime} ms
+MESSDATEN:
+- Aktuelle Sensitivität: ${currentSens}x bei ${dpi} DPI
+- Durchschnittliche Reaktionszeit: ${metrics.avgReactionTime} ms
 - Bewegungspfad-Effizienz: ${metrics.avgPathEfficiency}%
-- Overshoot-Rate: ${metrics.overshootRate}% (Maus schießt über das Ziel)
-- Undershoot-Rate: ${metrics.undershootRate}% (Maus stoppt vor dem Ziel)
+- Overshoot-Rate: ${metrics.overshootRate}% (Maus schießt über Minions/Champions hinaus)
 - Durchschnittlicher Durchsatz: ${metrics.avgThroughput} bits/s
 
 MESSREIHE DER KALIBRIERUNG:
 ${runText}
 
-Aufgabe: Welchen konkreten Multiplikator-Wechsel empfiehlst du für meine Spiele? Gib mir 2 direkte, mechanische Trainingstipps zur Mausführung (z.B. Grifftechnik, Handgelenk- vs. Arm-Nutzung), um meinen Overshoot zu senken und die Präzision zu steigern.`;
+Aufgabe: Empfiehl ihr basierend auf diesen Daten konkrete mechanische Anpassungen für das League of Legends Gameplay. Gib ihr 2 direkte Trainingstipps für diesen Modus (z.B. Click-Frequency, Handgelenks-Abstützung auf dem Mauspad, Kamerapositionierung), um die Genauigkeit zu steigern.`;
     }
 };

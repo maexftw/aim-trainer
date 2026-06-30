@@ -13,7 +13,7 @@ const StorageController = {
     saveProfile(dpi, multiplier, trainerMultiplier) {
         const profile = { 
             dpi: parseInt(dpi) || 12000, 
-            multiplier: parseFloat(multiplier) || 0.05,
+            multiplier: parseFloat(multiplier) || 50,
             trainerMultiplier: parseFloat(trainerMultiplier) || 1.0
         };
         localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(profile));
@@ -22,7 +22,7 @@ const StorageController = {
 
     // Load settings profile
     loadProfile() {
-        const defaultProfile = { dpi: 12000, multiplier: 0.05, trainerMultiplier: 1.0 };
+        const defaultProfile = { dpi: 12000, multiplier: 50, trainerMultiplier: 1.0 };
         const stored = localStorage.getItem(STORAGE_KEYS.PROFILE);
         if (stored) {
             try {
