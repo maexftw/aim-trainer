@@ -1186,19 +1186,35 @@ const App = {
             }
         }
 
-        // Render Custom LoL-Style Cursor
+        // Render Custom LoL-Style Cursor (Enlarged and glowing for high-DPI/4K screens)
+        this.ctx.save();
+        const cursorColor = this.currentMode === GameMode.KITING && this.activeKitingTarget === 'enemy' ? '#ff3b30' : '#c8aa6e';
+        
+        // Add neon outer glow
+        this.ctx.shadowColor = cursorColor;
+        this.ctx.shadowBlur = 12;
+        
         this.ctx.beginPath();
-        // Hover pointer
+        // Hover pointer shape (scaled up for high-DPI visibility)
         this.ctx.moveTo(this.virtualCursor.x, this.virtualCursor.y);
-        this.ctx.lineTo(this.virtualCursor.x + 12, this.virtualCursor.y + 12);
-        this.ctx.lineTo(this.virtualCursor.x + 4, this.virtualCursor.y + 12);
-        this.ctx.lineTo(this.virtualCursor.x, this.virtualCursor.y + 16);
+        this.ctx.lineTo(this.virtualCursor.x + 22, this.virtualCursor.y + 22);
+        this.ctx.lineTo(this.virtualCursor.x + 8, this.virtualCursor.y + 22);
+        this.ctx.lineTo(this.virtualCursor.x, this.virtualCursor.y + 30);
         this.ctx.closePath();
-        this.ctx.fillStyle = this.currentMode === GameMode.KITING && this.activeKitingTarget === 'enemy' ? 'var(--accent-red)' : 'var(--accent-gold)';
-        this.ctx.strokeStyle = '#000000';
+        
+        this.ctx.fillStyle = cursorColor;
+        this.ctx.strokeStyle = '#ffffff'; // White inner border to pop against black
         this.ctx.lineWidth = 1.5;
         this.ctx.fill();
         this.ctx.stroke();
+        
+        // Draw strong black outer border for high contrast
+        this.ctx.shadowBlur = 0; // Turn off glow for outer stroke
+        this.ctx.strokeStyle = '#000000';
+        this.ctx.lineWidth = 3.0;
+        this.ctx.stroke();
+        
+        this.ctx.restore();
 
         requestAnimationFrame(() => this.gameLoop());
     },
